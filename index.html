@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مغامرة نمو الحشرات</title>
+<style>
+:root{--bg:#F1EEFB;--card:#FFFFFF;--ink:#1F1B3A;--muted:#5A5486;--brand:#5B4BDB;--brand-d:#3B2FA0;--lime:#FFD166;--amber:#FF8A5B;--bad:#C0562F;--line:#D9D3F2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15122B;--card:#221D45;--ink:#EEEAFF;--muted:#B9B2E6;--brand:#7B6CF0;--brand-d:#FFD166;--line:#3A3469;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15122B;--card:#221D45;--ink:#EEEAFF;--muted:#B9B2E6;--brand:#7B6CF0;--brand-d:#FFD166;--line:#3A3469;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Tahoma,sans-serif;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:14px}
+h1{margin:0 0 6px;font-size:30px;color:var(--brand-d)} h2{margin:0 0 10px;font-size:22px}
+.big{font-size:60px;text-align:center;margin:4px 0}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px;font-size:18px;font-weight:700;background:var(--brand);color:#fff;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn.alt{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+input{width:100%;padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font-size:18px;font-family:inherit;margin-top:8px}
+.hud{display:flex;gap:8px;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0 14px}
+.bar i{display:block;height:100%;background:var(--amber);width:100%;transition:width .25s linear}
+.lv{display:flex;gap:6px;margin-bottom:12px}
+.lv div{flex:1;text-align:center;padding:6px;border-radius:10px;background:var(--line);font-weight:700;font-size:14px}
+.lv .now{background:var(--brand);color:#fff}.lv .done{background:var(--lime);color:#1F1B3A}
+.q{font-size:20px;font-weight:700;margin-bottom:12px}
+.opt{display:block;width:100%;text-align:right;margin:8px 0;padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:17px;cursor:pointer;font-family:inherit}
+.opt:hover:not(:disabled){border-color:var(--brand)}
+.opt.ok{background:#CFEBB0;border-color:#4E9A2F;color:#1B2A22}.opt.no{background:#F6D3C6;border-color:var(--bad);color:#1B2A22}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{padding:10px 14px;border-radius:12px;border:2px solid var(--brand);background:var(--card);color:var(--ink);font-size:17px;cursor:pointer;font-family:inherit}
+.chip:disabled{opacity:.35}
+.slots{min-height:54px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:8px}
+.slots span{background:var(--lime);color:#1F1B3A;padding:8px 12px;border-radius:10px;font-weight:700}
+.slots.ok{border-color:#4E9A2F}.slots.no{border-color:var(--bad)}
+.fb{margin-top:12px;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.lb{width:100%;border-collapse:collapse}.lb td,.lb th{padding:8px;border-bottom:1px solid var(--line);text-align:right}
+.lb tr.me{background:var(--bg);font-weight:700}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px}
+.badge{padding:10px;border-radius:14px;border:1px dashed var(--line);text-align:center;opacity:.45}
+.badge.on{opacity:1;border:2px solid var(--lime);background:var(--bg)}.badge b{display:block;font-size:28px}
+.pop{animation:pop .4s ease}@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.sh{animation:sh .35s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const LV=[
+{n:"المستوى 1: تذكّر",ic:"🥚",d:"تذكّر مراحل نمو الحشرات.",qs:[
+{t:"يمر التحول الكامل بأربع مراحل.",o:["صح","خطأ"],a:0,e:"التحول الكامل: بيضة ← يرقة ← عذراء ← حشرة كاملة، أي أربع مراحل."},
+{t:"يمر الجراد بمرحلة العذراء.",o:["صح","خطأ"],a:1,e:"الجراد تحوله ناقص، ولا توجد فيه مرحلة العذراء."},
+{t:"أكمل مراحل نمو الفراشة: البيضة، ____، العذراء، الحشرة الكاملة.",o:["اليرقة","الحورية","الانسلاخ","الجناح"],a:0,e:"تأتي اليرقة بعد البيضة في التحول الكامل."},
+{t:"أكمل مراحل نمو الجراد: البيضة، ____، الحشرة الكاملة.",o:["اليرقة","العذراء","الحورية","الشرنقة"],a:2,e:"التحول الناقص: بيضة ← حورية ← حشرة كاملة."}]},
+{n:"المستوى 2: توضيح",ic:"🐛",d:"وضّح الفرق بين التحول الكامل والناقص.",qs:[
+{t:"الفرق الرئيس بين التحول الكامل والناقص هو:",o:["وجود مرحلة العذراء في التحول الكامل","وجود البيضة في التحول الناقص فقط","حدوث الانسلاخ في الكامل فقط","عدد أرجل الحشرة"],a:0,e:"التحول الكامل يمر بمرحلة العذراء، أما الناقص فلا."},
+{t:"أي الحشرات الآتية تمر بالتحول الناقص؟",o:["الفراشة","الجراد","النحلة","الذبابة"],a:1,e:"الجراد مثال على التحول الناقص."},
+{t:"تنسلخ الحشرة لأن:",o:["هيكلها الخارجي الصلب لا يتسع لزيادة حجم الجسم","تريد تغيير لونها","تبحث عن الغذاء","تستعد للنوم"],a:0,e:"الهيكل الخارجي صلب لا ينمو، فتكوّن الحشرة هيكلًا جديدًا أكبر."},
+{t:"كم عدد مراحل التحول الناقص؟",o:["مرحلتان","ثلاث مراحل","أربع مراحل","خمس مراحل"],a:1,e:"ثلاث مراحل: البيضة والحورية والحشرة الكاملة."}]},
+{n:"المستوى 3: ترتيب وتصنيف",ic:"🦋",d:"رتّب المراحل وصنّف الحشرات.",qs:[
+{t:"رتِّب مراحل نمو الفراشة بالضغط عليها بالترتيب الصحيح:",ord:["البيضة","اليرقة","العذراء","الحشرة الكاملة"],e:"البيضة ← اليرقة ← العذراء ← الحشرة الكاملة."},
+{t:"رتِّب مراحل نمو الجراد بالضغط عليها بالترتيب الصحيح:",ord:["البيضة","الحورية","الحشرة الكاملة"],e:"البيضة ← الحورية ← الحشرة الكاملة."},
+{t:"المرحلة التي تأتي بعد البيضة في التحول الناقص هي:",o:["اليرقة","الحورية","العذراء","الحشرة الكاملة"],a:1,e:"بعد البيضة تأتي الحورية."},
+{t:"حشرة تضع بيضًا يفقس عن يرقة دودية الشكل، ثم عذراء، ثم حشرة بالغة. نوع تحولها:",o:["كامل","ناقص","بدون انسلاخ","لا تتحول"],a:0,e:"وجود اليرقة ثم العذراء يدل على التحول الكامل."}]}];
+const T=20,KEY="insectLB",mem={};let S,timer;
+const $=document.getElementById("app");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function load(){try{const v=localStorage.getItem(KEY);if(v)return JSON.parse(v)}catch(e){}return mem.lb||[]}
+function save(l){mem.lb=l;try{localStorage.setItem(KEY,JSON.stringify(l))}catch(e){}}
+function lbHTML(me){const l=load();if(!l.length)return"<p>لا توجد نتائج بعد. كن أول المتصدرين!</p>";
+ return`<table class="lb"><tr><th>#</th><th>الاسم</th><th>النقاط</th><th>المستوى</th></tr>${l.map((e,i)=>`<tr class="${e.id===me?"me":""}"><td>${["🥇","🥈","🥉"][i]||i+1}</td><td>${esc(e.name)}</td><td>${e.score}</td><td>${e.lv}/3</td></tr>`).join("")}</table>`}
+function home(){
+ $.innerHTML=`<div class="card pop"><div class="big">🦋🐛🦗</div><h1>مغامرة نمو الحشرات</h1>
+ <p>3 مستويات و12 سؤالًا، ولديك 3 قلوب ❤️. اجمع النقاط وادخل لوحة المتصدرين!</p>
+ <input id="nm" maxlength="20" placeholder="اكتب اسمك هنا" autocomplete="off">
+ <button class="btn" id="go">ابدأ المغامرة</button></div>
+ <div class="card"><h2>🏆 لوحة المتصدرين</h2>${lbHTML()}<button class="btn alt" id="clr">مسح اللوحة</button></div>`;
+ document.getElementById("go").onclick=()=>{const n=document.getElementById("nm").value.trim();if(!n){document.getElementById("nm").focus();document.getElementById("nm").placeholder="من فضلك اكتب اسمك أولًا";return}
+  S={name:n,id:Date.now(),l:0,i:0,score:0,lives:3,streak:0,best:0,fast:false,ok:[0,0,0],done:0,picks:[]};intro()};
+ let sure=false;const c=document.getElementById("clr");
+ c.onclick=()=>{if(!sure){sure=true;c.textContent="اضغط مرة أخرى للتأكيد";return}save([]);home()};
+}
+function hud(){return`<div class="hud"><span class="pill">👤 ${esc(S.name)}</span><span class="pill">⭐ ${S.score}</span><span class="pill">${"❤️".repeat(S.lives)||"💔"}</span><span class="pill">🔥 ${S.streak}</span></div>
+<div class="lv">${LV.map((x,k)=>`<div class="${k<S.l?"done":k===S.l?"now":""}">${x.ic} ${k+1}</div>`).join("")}</div>`}
+function intro(){clearInterval(timer);const v=LV[S.l];
+ $.innerHTML=hud()+`<div class="card pop"><div class="big">${v.ic}</div><h2 style="text-align:center">${v.n}</h2><p style="text-align:center">${v.d}</p><button class="btn" id="st">ابدأ المستوى</button></div>`;
+ document.getElementById("st").onclick=()=>{S.i=0;ask()}}
+function ask(){clearInterval(timer);const v=LV[S.l],q=v.qs[S.i];S.locked=false;S.t0=Date.now();S.left=q.ord?30:T;S.max=S.left;S.picks=[];
+ let body;
+ if(q.ord){q.sh=shuf(q.ord);body=`<div class="slots" id="sl"></div><div class="chips" id="ch">${q.sh.map((x,k)=>`<button class="chip" data-k="${k}">${x}</button>`).join("")}</div><button class="btn alt" id="rs">إعادة الترتيب</button>`}
+ else{q.ordr=shuf(q.o.map((x,k)=>k));body=q.ordr.map(k=>`<button class="opt" data-k="${k}">${q.o[k]}</button>`).join("")}
+ $.innerHTML=hud()+`<div class="card"><div style="color:var(--muted);font-size:14px">${v.n} — سؤال ${S.i+1} من ${v.qs.length}</div><div class="bar"><i id="tb"></i></div><div class="q">${q.t}</div>${body}<div id="fb"></div></div>`;
+ if(q.ord){document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{if(S.locked)return;b.disabled=true;S.picks.push(+b.dataset.k);document.getElementById("sl").innerHTML=S.picks.map(k=>`<span>${q.sh[k]}</span>`).join("");if(S.picks.length===q.ord.length)answer(S.picks.every((k,j)=>q.sh[k]===q.ord[j])?1:0)});
+  document.getElementById("rs").onclick=()=>{if(S.locked)return;S.picks=[];document.getElementById("sl").innerHTML="";document.querySelectorAll(".chip").forEach(b=>b.disabled=false)}}
+ else document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k===q.a?1:0,+b.dataset.k));
+ timer=setInterval(()=>{S.left-=.25;document.getElementById("tb").style.width=(S.left/S.max*100)+"%";if(S.left<=0)answer(-1)},250)}
+function answer(r,pk){if(S.locked)return;S.locked=true;clearInterval(timer);
+ const v=LV[S.l],q=v.qs[S.i],ok=r===1,sec=(Date.now()-S.t0)/1000;let gain=0;
+ if(ok){S.streak++;S.best=Math.max(S.best,S.streak);S.ok[S.l]++;gain=100+Math.round(Math.max(0,S.max-sec)/S.max*50)+(S.streak>1?25*(S.streak-1):0);S.score+=gain;if(sec<5)S.fast=true}else{S.streak=0;S.lives--}
+ if(q.ord){document.getElementById("sl").classList.add(ok?"ok":"no");document.querySelectorAll(".chip").forEach(b=>b.disabled=true)}
+ else document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.k;if(k===q.a)b.classList.add("ok");else if(k===pk)b.classList.add("no","sh")});
+ const lvEnd=S.i===v.qs.length-1,over=S.lives<=0,last=lvEnd&&S.l===LV.length-1;
+ document.getElementById("fb").innerHTML=`<div class="fb pop"><b>${ok?"أحسنت! +"+gain+" نقطة 🎉":r<0?"انتهى الوقت ⏰":"إجابة غير صحيحة 💔"}</b><br>${q.e}</div><button class="btn" id="nx">${over||last?"عرض النتيجة":lvEnd?"إنهاء المستوى":"السؤال التالي ←"}</button>`;
+ document.getElementById("nx").onclick=()=>{if(over){end()}else if(lvEnd){lvDone()}else{S.i++;ask()}}}
+function lvDone(){const c=S.ok[S.l],n=LV[S.l].qs.length,st=c===n?3:c>=n-1?2:1,bonus=st*50;S.score+=bonus;S.done=S.l+1;
+ $.innerHTML=hud()+`<div class="card pop"><div class="big">${"⭐".repeat(st)}${"☆".repeat(3-st)}</div><h2 style="text-align:center">أنهيت ${LV[S.l].n}</h2><p style="text-align:center">الإجابات الصحيحة: ${c} من ${n}<br>مكافأة النجوم: +${bonus}</p><button class="btn" id="nl">${S.l===LV.length-1?"عرض النتيجة":"المستوى التالي ←"}</button></div>`;
+ document.getElementById("nl").onclick=()=>{if(S.l===LV.length-1)end();else{S.l++;intro()}}}
+function end(){clearInterval(timer);const won=S.done===LV.length&&S.lives>0,tot=S.ok.reduce((a,b)=>a+b,0);
+ const l=load();l.push({id:S.id,name:S.name,score:S.score,lv:S.done});l.sort((a,b)=>b.score-a.score);save(l.slice(0,10));
+ const R=[[0,"بيضة 🥚"],[400,"حورية 🦗"],[800,"يرقة نشيطة 🐛"],[1300,"عذراء 🪺"],[1800,"حشرة كاملة 🦋"]];let rk=R[0][1];R.forEach(r=>{if(S.score>=r[0])rk=r[1]});
+ const B=[["🥇","بطل المستوى 1",S.ok[0]===4],["🥈","بطل المستوى 2",S.ok[1]===4],["🥉","بطل المستوى 3",S.ok[2]===4],["⚡","سريع البرق",S.fast],["🔥","سلسلة 5 متتالية",S.best>=5],["💎","بلا أخطاء",won&&tot===12]];
+ const pos=load().findIndex(e=>e.id===S.id)+1;
+ $.innerHTML=`<div class="card pop"><div class="big">${won?"🏆":"💔"}</div><h2 style="text-align:center">${won?"أكملت المغامرة يا "+esc(S.name)+"!":"انتهت القلوب يا "+esc(S.name)+"، حاول مرة أخرى"}</h2>
+ <p style="text-align:center;font-size:18px">النقاط: <b>${S.score}</b> — الإجابات الصحيحة: <b>${tot}</b> من 12<br>مستواك: <b>${rk}</b>${pos?"<br>ترتيبك في اللوحة: <b>"+pos+"</b>":""}</p>
+ <h2>الشارات</h2><div class="badges">${B.map(b=>`<div class="badge ${b[2]?"on":""}"><b>${b[0]}</b>${b[1]}</div>`).join("")}</div></div>
+ <div class="card"><h2>🏆 لوحة المتصدرين</h2>${lbHTML(S.id)}</div>
+ <button class="btn" id="ag">لاعب جديد / العب مرة أخرى</button>`;
+ document.getElementById("ag").onclick=home}
+home();
+</script>
+</body>
+</html>
